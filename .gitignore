@@ -1,10 +1,8 @@
-__pycache__/
-*.py[cod]
-.env
-.venv/
-venv/
+node_modules/
+auth/
 data/*.db
 data/*.db-*
+.env
 *.log
 .DS_Store
 .idea/

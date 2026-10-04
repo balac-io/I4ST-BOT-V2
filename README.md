@@ -1,63 +1,63 @@
-# I4ST-BOT-V2 — BOOYAH WhatsApp
+# I4ST-BOT-V2 — BOOYAH WhatsApp (Baileys)
 
-Bot WhatsApp inspiré de **I4ST-BOT-V1** (Discord).
+Bot WhatsApp **sans Meta / Facebook**. Connexion par **QR code** (comme WhatsApp Web).
 
-## Fonctionnalités
+## Prérequis
 
-| Module | Commandes |
-|--------|-----------|
-| **Économie** | `/balance` `/daily` `/work` `/pay` `/deposit` `/withdraw` `/leaderboard` `/coinflip` `/slots` `/dice` `/roulette` |
-| **Niveaux** | `/level` `/rank` (XP auto sur chaque message) |
-| **Premium** | `/premium` `/premium-buy` |
-| **IA** | `/ai` (Groq) |
-| **Aide** | `/help` `/ping` |
+- Node.js **20+**
+- Un téléphone avec WhatsApp
 
-## Stack
-
-- **Python 3.11+**
-- **FastAPI** — webhook Meta WhatsApp Cloud API
-- **SQLite** — même logique que V1
-- **Groq** — réponses IA
-
-## Setup
-
-1. Clone le repo
-2. `pip install -r requirements.txt`
-3. Copie `.env.example` → `.env` et remplis :
-
-```env
-WHATSAPP_TOKEN=EAAxxxx          # Meta Cloud API token
-WHATSAPP_PHONE_NUMBER_ID=123   # Phone Number ID
-WHATSAPP_VERIFY_TOKEN=booyah   # Token de vérification webhook
-GROQ_API_KEY=gsk_xxxx
-OWNER_PHONES=33612345678       # admins séparés par virgule (sans +)
-```
-
-4. Expose le serveur (ngrok / VPS) :
+## Installation
 
 ```bash
-uvicorn main:app --host 0.0.0.0 --port 8000
+git clone https://github.com/balac-io/I4ST-BOT-V2.git
+cd I4ST-BOT-V2
+npm install
+cp .env.example .env
+# édite .env → mets ta GROQ_API_KEY
 ```
 
-5. Dans [Meta Developers](https://developers.facebook.com/) → WhatsApp → Configuration webhook :
-   - Callback URL : `https://ton-domaine/webhook`
-   - Verify token : celui de `.env`
-   - Abonne-toi aux événements **messages**
+## Lancer
 
-## Commandes exemples
-
-```
-/help
-/daily
-/balance
-/work
-/coinflip 100 pile
-/ai Salut !
-/level
+```bash
+npm start
 ```
 
-## Différences avec Discord (V1)
+1. Un **QR code** s'affiche dans le terminal
+2. WhatsApp téléphone → **Appareils connectés** → **Connecter un appareil**
+3. Scan le QR
+4. Tu vois `BOOYAH connecté`
 
-WhatsApp n’a pas de salons, rôles, boutons ni embeds riches.
-Les commandes passent par du **texte** (`/commande`).
-Modération / tickets / vocal Discord ne sont pas portés 1:1.
+## Commandes
+
+| Commande | Description |
+|----------|-------------|
+| `/help` | Liste des commandes |
+| `/ping` | Test |
+| `/balance` | Solde coins |
+| `/daily` | Récompense + streak |
+| `/work` | Travailler |
+| `/pay <num> <montant>` | Envoyer des coins |
+| `/deposit [montant\|all]` | Banque |
+| `/withdraw [montant\|all]` | Retirer |
+| `/leaderboard` | Top riches |
+| `/coinflip <mise> pile\|face` | Pile ou face |
+| `/slots <mise>` | Machine à sous |
+| `/dice <mise>` | Dés |
+| `/roulette <mise> rouge\|noir\|0-36` | Roulette |
+| `/level` | Niveau XP |
+| `/xptop` | Classement XP |
+| `/premium` | Statut Premium |
+| `/premium-buy 7\|30\|90` | Acheter Premium |
+| `/ai <question>` | IA (Groq) |
+
+## Fichiers importants
+
+- `auth/` — session WhatsApp (**ne jamais commit / partager**)
+- `data/booyah.db` — base SQLite
+- `src/` — handlers économie, niveaux, IA, premium
+
+## Notes
+
+- Baileys est **non officiel** → évite le spam pour réduire le risque de ban
+- L'ancien code Python (Meta API) n'est plus utilisé
