@@ -5,13 +5,13 @@ const client = process.env.GROQ_API_KEY
   ? new Groq({ apiKey: process.env.GROQ_API_KEY })
   : null
 
-// Modele accessible sur le free tier Groq
-const MODEL = process.env.GROQ_MODEL || "llama-3.1-8b-instant"
+// Free tier Groq (2026) : openai/gpt-oss-20b | openai/gpt-oss-120b | qwen/qwen3.8-27b
+const MODEL = process.env.GROQ_MODEL || "openai/gpt-oss-20b"
 
 export async function cmdAi(args) {
   const prompt = args.join(" ").trim()
-  if (!prompt) return "\u274c `/ai <ta question>`"
-  if (!client) return "\u274c GROQ_API_KEY manquante dans .env"
+  if (!prompt) return "❌ `/ai <ta question>`"
+  if (!client) return "❌ GROQ_API_KEY manquante dans .env"
 
   try {
     const chat = await client.chat.completions.create({
@@ -28,8 +28,8 @@ export async function cmdAi(args) {
       temperature: 0.7,
     })
     const reply = chat.choices[0]?.message?.content?.trim() || "..."
-    return `\ud83e\udd16 *BOOYAH*\n\n${reply}`
+    return `🤖 *BOOYAH*\n\n${reply}`
   } catch (e) {
-    return `\u274c Erreur IA : ${e.message}`
+    return `❌ Erreur IA : ${e.message}`
   }
 }
