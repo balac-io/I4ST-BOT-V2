@@ -5,19 +5,22 @@ const client = process.env.GROQ_API_KEY
   ? new Groq({ apiKey: process.env.GROQ_API_KEY })
   : null
 
+// Modele accessible sur le free tier Groq
+const MODEL = process.env.GROQ_MODEL || "llama-3.1-8b-instant"
+
 export async function cmdAi(args) {
   const prompt = args.join(" ").trim()
-  if (!prompt) return "❌ `/ai <ta question>`"
-  if (!client) return "❌ GROQ_API_KEY manquante dans .env"
+  if (!prompt) return "\u274c `/ai <ta question>`"
+  if (!client) return "\u274c GROQ_API_KEY manquante dans .env"
 
   try {
     const chat = await client.chat.completions.create({
-      model: "llama-3.3-70b-versatile",
+      model: MODEL,
       messages: [
         {
           role: "system",
           content:
-            "Tu es BOOYAH, assistant WhatsApp fun et utile. Réponds en français, clair et concis.",
+            "Tu es BOOYAH, assistant WhatsApp fun et utile. Reponds en francais, clair et concis.",
         },
         { role: "user", content: prompt },
       ],
@@ -25,8 +28,8 @@ export async function cmdAi(args) {
       temperature: 0.7,
     })
     const reply = chat.choices[0]?.message?.content?.trim() || "..."
-    return `🤖 *BOOYAH*\n\n${reply}`
+    return `\ud83e\udd16 *BOOYAH*\n\n${reply}`
   } catch (e) {
-    return `❌ Erreur IA : ${e.message}`
+    return `\u274c Erreur IA : ${e.message}`
   }
 }
